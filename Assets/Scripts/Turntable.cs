@@ -15,11 +15,11 @@ public class Turntable : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.LeftArrow))
         {
-            transform.Rotate(transform.position,1);
+            transform.Rotate(transform.position,-1);
         }else
             if(Input.GetKey(KeyCode.RightArrow))
         {
-            transform.Rotate(transform.position,- 1);
+            transform.Rotate(transform.position,1);
         }
     }
 }
