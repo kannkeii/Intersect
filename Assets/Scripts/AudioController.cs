@@ -21,13 +21,15 @@ public class AudioController : MonoBehaviour
             Destroy(gameObject);
             Debug.LogError("AudioControllerのインスタンスが失敗しました。");
         }
+
+        DontDestroyOnLoad(this.gameObject);
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
-        audioSource = GetComponent<AudioSource>();
+        
     }
 
     // Update is called once per frame
