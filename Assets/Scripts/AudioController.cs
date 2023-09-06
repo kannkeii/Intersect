@@ -22,7 +22,8 @@ public class AudioController : MonoBehaviour
             Debug.LogError("AudioControllerのインスタンスが失敗しました。");
         }
 
-        DontDestroyOnLoad(this.gameObject);
+        //DontDestroyOnLoad(this.gameObject);
+        //this.gameObject.tag = "DontDestroyOnLoad";
         audioSource = GetComponent<AudioSource>();
     }
 

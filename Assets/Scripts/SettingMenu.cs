@@ -20,6 +20,7 @@ public class SettingMenu : MonoBehaviour
         onOffButtontext = MenuOnOffButton.GetComponentInChildren<TextMeshProUGUI>();
         oldPosition = transform.localPosition;
         showMenuFlag = false;
+        MenuOnOff();
         MenuOnOffButton.onClick.AddListener(MenuOnOff);
         //MenuOnOff();
     }

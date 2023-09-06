@@ -8,6 +8,7 @@ public class Stage : MonoBehaviour
     void Start()
     {
         DontDestroyOnLoad(this.gameObject);
+        this.gameObject.tag = "DontDestroyOnLoad";
     }
 
     // Update is called once per frame
