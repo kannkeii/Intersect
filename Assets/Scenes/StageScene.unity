@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -273,10 +273,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4964297469479228183, guid: dfbfeeca173bc6c48a8ed373118df857, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1135279068223102986, guid: dfbfeeca173bc6c48a8ed373118df857, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1172227308}
     - targetCorrespondingSourceObject: {fileID: 1135279068223102986, guid: dfbfeeca173bc6c48a8ed373118df857, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1172227307}
@@ -298,6 +305,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02382b283e3df9340a3368a099ff1061, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1172227308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1172227306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f486b659d1ddc444da944f357fe3db5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Road: {fileID: 7644486915520811861, guid: d2a36928138de3541853985c08acf7e5, type: 3}
 --- !u!1 &1209980637
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,7 +425,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1437821537
 Transform:
   m_ObjectHideFlags: 0
