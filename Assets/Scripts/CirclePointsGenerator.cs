@@ -40,16 +40,16 @@ public static class CirclePointsGenerator
     }
 
     /// <summary>
-    /// ‰~‚Ì’†S‚©‚ç“_‚Ü‚Å‚ÌËü‚Ì•ûŒü‚ğZo
+    /// ‰~‚Ì’†S‚©‚ç“_‚Ü‚Å‚ÌËü‚Ì•ûŒü‚ğZo(return Šp“x)
     /// </summary>
     /// <param name="point"></param>
     /// <returns></returns>
     public static float GetPointAngle(Vector2 center, Vector2 point)
     {
-        float angle = Mathf.Atan2(point.y - center.y, point.x - center.x);
+        float angle = Mathf.Atan2(point.y - center.y, point.x - center.x);//ƒ‰ƒWƒAƒ“
 
-        float angleInDegrees = angle * 180f / Mathf.PI;
-
+        float angleInDegrees = angle * 180f / Mathf.PI;//Šp“x
+        //angleInDegrees = (angleInDegrees + 360) % 360;//0‚©‚ç‚R‚U‚O‚Ü‚Å‚Ì”ÍˆÍ“à‚ÉŠm•Û
         return angleInDegrees;
     }
 }

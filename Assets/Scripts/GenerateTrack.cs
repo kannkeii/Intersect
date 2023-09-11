@@ -57,10 +57,15 @@ public class GenerateTrack : MonoBehaviour
         {
             float angleInDegrees = CirclePointsGenerator.GetPointAngle(center, point);
 
-            Transform transform = Instantiate(Road).transform;
+            Transform transform = Instantiate(Road).transform;//GameObject.CreatePrimitive(PrimitiveType.Cube).transform;//Debug
             transform.parent = this.transform;
-            transform.position = new Vector3(point.x,0 , point.y);
-            transform.eulerAngles = new Vector3(0, angleInDegrees, 0);
+            //transform.position = new Vector3(point.x, 0, point.y);
+
+            Debug.Log(angleInDegrees);
+            //transform.GetChild(0).eulerAngles = new Vector3(0,  angleInDegrees, 0);
+            transform.rotation = Quaternion.Euler(0, transform.rotation.y + angleInDegrees, 0);
+            //transform.GetChild(0).rotation = Quaternion.Euler(0, transform.GetChild(0).rotation.y+ angleInDegrees, 0);
+
         }
     }
 
