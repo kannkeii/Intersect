@@ -48,7 +48,7 @@ public class GenerateTrack : MonoBehaviour
         
         float radius = transform.localScale.x;//‰~‚Ì”¼Œa
         Vector2 center = new Vector2(transform.position.x, transform.position.z);//transform.position;//‰~‚Ì’†S
-        int numPoints = 3;//æ“¾‚µ‚½‚¢À•W‚Ì”
+        int numPoints = 8;//æ“¾‚µ‚½‚¢À•W‚Ì”
         float minAngle = 20f;//“_‚Æ“_‚ÌÅ¬ŠÔŠu(Šp“x)
 
         List<Vector2> points = CirclePointsGenerator.GeneratePoints(radius, center, numPoints, minAngle);
@@ -61,7 +61,6 @@ public class GenerateTrack : MonoBehaviour
             transform.parent = this.transform;
             //transform.position = new Vector3(point.x, 0, point.y);
 
-            Debug.Log(angleInDegrees);
             //transform.GetChild(0).eulerAngles = new Vector3(0,  angleInDegrees, 0);
             transform.rotation = Quaternion.Euler(0, transform.rotation.y + angleInDegrees, 0);
             //transform.GetChild(0).rotation = Quaternion.Euler(0, transform.GetChild(0).rotation.y+ angleInDegrees, 0);

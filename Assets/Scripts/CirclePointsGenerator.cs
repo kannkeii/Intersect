@@ -49,7 +49,7 @@ public static class CirclePointsGenerator
         float angle = Mathf.Atan2(point.y - center.y, point.x - center.x);//ƒ‰ƒWƒAƒ“
 
         float angleInDegrees = angle * 180f / Mathf.PI;//Šp“x
-        //angleInDegrees = (angleInDegrees + 360) % 360;//0‚©‚ç‚R‚U‚O‚Ü‚Å‚Ì”ÍˆÍ“à‚ÉŠm•Û
+        
         return angleInDegrees;
     }
 }
