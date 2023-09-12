@@ -4,9 +4,8 @@ using UnityEngine;
 
 public abstract class Road:MonoBehaviour
 {
-    public Quaternion rotation;
 
-    //public Vector3 vector3;
+    public Transform endRoadTransform;
 
     public enum DIR
     {

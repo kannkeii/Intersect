@@ -11,10 +11,10 @@ public static class CirclePointsGenerator
     /// <param name="numPoints">取得したい座標の数</param>
     /// <param name="minAngle">点と点の間隔(角度)</param>
     /// <returns></returns>
-    public static List<Vector2> GeneratePoints(float radius, Vector2 center, int numPoints, float minAngle)
+    public static List<Vector2> GeneratePoints(float radius, Vector2 center, int roadNum, float minAngle)
     {
         List<Vector2> points = new List<Vector2>();
-        for (int i = 0; i < numPoints; i++)
+        for (int i = 0; i < roadNum; i++)
         {
             Vector2 point;//座標
             float angle;//乱数角度

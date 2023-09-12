@@ -6,6 +6,8 @@ public class Turntable : MonoBehaviour
 {
     public static Vector3 LocalScale {get {return localScale;} }
 
+    public int roadNum;//éÊìæÇµÇΩÇ¢ç¿ïWÇÃêî
+
     static Vector3 localScale = default;
 
     public GameObject RoadObject;
@@ -45,29 +47,42 @@ public class Turntable : MonoBehaviour
             transform.Rotate(transform.position,1);
         }
     }
-
     public void Generate()
     {
 
         float radius = transform.localScale.x;//â~ÇÃîºåa
         Vector2 center = new Vector2(transform.position.x, transform.position.z);//transform.position;//â~ÇÃíÜêS
-        int numPoints = 8;//éÊìæÇµÇΩÇ¢ç¿ïWÇÃêî
+        
+        if (roadNum <= 0) roadNum = 2;
+        else if (roadNum % 2 != 0) roadNum++;
         float minAngle = 20f;//ì_Ç∆ì_ÇÃç≈è¨ä‘äu(äpìx)
 
-        List<Vector2> points = CirclePointsGenerator.GeneratePoints(radius, center, numPoints, minAngle);
+        List<Vector2> points = CirclePointsGenerator.GeneratePoints(radius, center, roadNum, minAngle);
 
+        int roadCnt = 0;
         foreach (var point in points)
         {
             float angleInDegrees = CirclePointsGenerator.GetPointAngle(center, point);
 
             Transform transform = Instantiate(RoadObject).transform;//GameObject.CreatePrimitive(PrimitiveType.Cube).transform;//Debug
+
+            Road.DIR dir = Road.DIR.DIR_IN;
+
+            if(roadCnt % 2 != 0)
+            {
+                dir = Road.DIR.DIR_OUT;
+            }
+
+            transform.GetComponent<Road>().dir = dir;
+
             transform.parent = this.transform.parent;
+            
             //transform.position = new Vector3(point.x, 0, point.y);
 
             //transform.GetChild(0).eulerAngles = new Vector3(0,  angleInDegrees, 0);
             transform.rotation = Quaternion.Euler(0, transform.rotation.y + angleInDegrees, 0);
             //transform.GetChild(0).rotation = Quaternion.Euler(0, transform.GetChild(0).rotation.y+ angleInDegrees, 0);
-
+            roadCnt++;
         }
     }
 }

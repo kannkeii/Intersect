@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class TrainFactory
 {
-    public abstract Train CreateTrain();
+    public abstract GameObject CreateTrain(GameObject trainPrefab);
 }

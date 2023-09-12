@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public delegate void GameStartHandler();
     public event GameStartHandler OnGameStart;
+
+    
     // Start is called before the first frame update
 
     //Awake->OnEnable->Start
@@ -22,6 +24,7 @@ public class GameManager : MonoBehaviour
     void OnEnable()
     {
         OnGameStart += Turntable.Instance.Generate;
+        OnGameStart += GenerateTrack.Instance.Generate;
 
 
     }
@@ -29,6 +32,7 @@ public class GameManager : MonoBehaviour
     void OnDisable()
     {
         OnGameStart -= Turntable.Instance.Generate;
+        OnGameStart -= GenerateTrack.Instance.Generate;
     }
 
 

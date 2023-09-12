@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ElectricTrainFactory : TrainFactory
 {
-    public override Train CreateTrain()
+    public override GameObject CreateTrain(GameObject trainPrefab)
     {
-        return new ElectricTrain();
+        return UnityEngine.Object.Instantiate(trainPrefab);
     }
 }
