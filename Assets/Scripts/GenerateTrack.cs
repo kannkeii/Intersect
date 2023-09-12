@@ -8,7 +8,6 @@ public class GenerateTrack : MonoBehaviour
 
     private static GenerateTrack instance = null;
 
-    public GameObject Road;
     private void Awake()
     {
 
@@ -42,36 +41,4 @@ public class GenerateTrack : MonoBehaviour
     {
         
     }
-
-    public void Generate()
-    {
-        
-        float radius = transform.localScale.x;//â~ÇÃîºåa
-        Vector2 center = new Vector2(transform.position.x, transform.position.z);//transform.position;//â~ÇÃíÜêS
-        int numPoints = 8;//éÊìæÇµÇΩÇ¢ç¿ïWÇÃêî
-        float minAngle = 20f;//ì_Ç∆ì_ÇÃç≈è¨ä‘äu(äpìx)
-
-        List<Vector2> points = CirclePointsGenerator.GeneratePoints(radius, center, numPoints, minAngle);
-
-        foreach(var point in points)
-        {
-            float angleInDegrees = CirclePointsGenerator.GetPointAngle(center, point);
-
-            Transform transform = Instantiate(Road).transform;//GameObject.CreatePrimitive(PrimitiveType.Cube).transform;//Debug
-            transform.parent = this.transform;
-            //transform.position = new Vector3(point.x, 0, point.y);
-
-            //transform.GetChild(0).eulerAngles = new Vector3(0,  angleInDegrees, 0);
-            transform.rotation = Quaternion.Euler(0, transform.rotation.y + angleInDegrees, 0);
-            //transform.GetChild(0).rotation = Quaternion.Euler(0, transform.GetChild(0).rotation.y+ angleInDegrees, 0);
-
-        }
-    }
-
-
-
-    //private List<Vector3> GetTrackStartPosition()
-    //{
-
-    //}
 }

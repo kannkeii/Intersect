@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Road
+public abstract class Road:MonoBehaviour
 {
     public Quaternion rotation;
 
@@ -15,9 +15,4 @@ public abstract class Road
     }
 
     public DIR dir = DIR.DIR_IN;
-}
-
-public class RoadList:Road
-{
-    public List<Vector2> vectorArray;
 }

@@ -21,14 +21,14 @@ public class GameManager : MonoBehaviour
 
     void OnEnable()
     {
-        OnGameStart += GenerateTrack.Instance.Generate;
+        OnGameStart += Turntable.Instance.Generate;
 
 
     }
 
     void OnDisable()
     {
-        OnGameStart -= GenerateTrack.Instance.Generate;
+        OnGameStart -= Turntable.Instance.Generate;
     }
 
 
