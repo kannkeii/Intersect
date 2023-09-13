@@ -12,7 +12,7 @@ public class GenerateTrack : MonoBehaviour
 
     private GameObject[] roads;
 
-    private List<StraightRoad> roadsComponent, comeRoadsComponent;
+    private List<StraightRoad> roadsComponent, comeRoadsComponent,outRoadComponent;
 
     private void Awake()
     {
@@ -26,6 +26,7 @@ public class GenerateTrack : MonoBehaviour
 
         comeRoadsComponent = new List<StraightRoad>();
 
+        outRoadComponent = new List<StraightRoad>();
     }
 
     void OnEnable()
@@ -62,21 +63,43 @@ public class GenerateTrack : MonoBehaviour
             roadsComponent.Add(roadObjcet.GetComponent<StraightRoad>());
         }
 
-        GetComeRoad();
+        GetComeOutRoad();
 
-        int comeRoadCnt = Random.Range(0, comeRoadsComponent.Count - 1);//óêêîäpìxê∂ê¨
-
-        Create(comeRoadCnt);
+        Create();
     }
 
-    private void GetComeRoad()
+    private void GetComeOutRoad()
     {
         foreach (StraightRoad roadCom in roadsComponent)
         {
             if(roadCom.dir == Road.DIR.DIR_IN)
             {
                 comeRoadsComponent.Add(roadCom);
+            }else if(roadCom.dir == Road.DIR.DIR_OUT)
+            {
+                outRoadComponent.Add(roadCom);
             }
+        }
+    }
+
+    void Create()
+    {
+        if (comeRoadsComponent.Count <= 0) return;
+
+        
+        int roadNum = Random.Range(0, comeRoadsComponent.Count-1);
+        roadNum++;
+        Debug.Log(roadNum);
+        for (int roadCnt =0;roadCnt< roadNum; roadCnt++)
+        {
+            if (comeRoadsComponent.Count <= 0) return;
+
+            int comeRoadCnt = Random.Range(0, comeRoadsComponent.Count - 1);
+
+            Create(comeRoadCnt);
+
+            comeRoadsComponent.RemoveAt(comeRoadCnt);
+
         }
     }
 

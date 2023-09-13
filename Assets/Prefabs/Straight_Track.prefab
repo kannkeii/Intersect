@@ -507,8 +507,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1024354884975672661}
-  - component: {fileID: 3498006269686941525}
   - component: {fileID: -551438419554134221}
+  - component: {fileID: 2236605349604262212}
   m_Layer: 0
   m_Name: Straight_Track
   m_TagString: Road
@@ -537,8 +537,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &3498006269686941525
-SphereCollider:
+--- !u!114 &-551438419554134221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7644486915520811861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2aef089be8706f14ca36501a6ef9f603, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endRoadTransform: {fileID: 3226449558828315265}
+  dir: 0
+--- !u!65 &2236605349604262212
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -554,21 +568,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-551438419554134221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7644486915520811861}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2aef089be8706f14ca36501a6ef9f603, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endRoadTransform: {fileID: 3226449558828315265}
-  dir: 0
+  serializedVersion: 3
+  m_Size: {x: 0.25, y: 2, z: 23.3}
+  m_Center: {x: 0, y: 2, z: -12.62}
