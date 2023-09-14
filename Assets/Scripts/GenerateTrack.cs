@@ -8,6 +8,8 @@ public class GenerateTrack : MonoBehaviour
 
     private static GenerateTrack instance = null;
 
+    
+
     public GameObject trainPrefab;
 
     private GameObject[] roads;
@@ -27,6 +29,8 @@ public class GenerateTrack : MonoBehaviour
         comeRoadsComponent = new List<StraightRoad>();
 
         outRoadComponent = new List<StraightRoad>();
+
+        
     }
 
     void OnEnable()
@@ -55,7 +59,6 @@ public class GenerateTrack : MonoBehaviour
 
     public void Generate()
     {
-
         roads = GameObject.FindGameObjectsWithTag("Road");
 
         foreach (GameObject roadObjcet in roads)
@@ -66,6 +69,8 @@ public class GenerateTrack : MonoBehaviour
         GetComeOutRoad();
 
         Create();
+
+        //GameManager.Instance.handlerStatus["GenerateTrack::Generate"] = true;
     }
 
     private void GetComeOutRoad()

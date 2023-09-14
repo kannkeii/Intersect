@@ -49,7 +49,7 @@ public class Turntable : MonoBehaviour
     }
     public void Generate()
     {
-
+        
         float radius = transform.localScale.x;//â~ÇÃîºåa
         Vector2 center = new Vector2(transform.position.x, transform.position.z);//transform.position;//â~ÇÃíÜêS
         
@@ -84,5 +84,7 @@ public class Turntable : MonoBehaviour
             //transform.GetChild(0).rotation = Quaternion.Euler(0, transform.GetChild(0).rotation.y+ angleInDegrees, 0);
             roadCnt++;
         }
+
+        //GameManager.Instance.handlerStatus["Turntable::Generate"] = true;
     }
 }
