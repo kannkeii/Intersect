@@ -69,8 +69,6 @@ public class GenerateTrack : MonoBehaviour
         GetComeOutRoad();
 
         Create();
-
-        //GameManager.Instance.handlerStatus["GenerateTrack::Generate"] = true;
     }
 
     private void GetComeOutRoad()

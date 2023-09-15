@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,14 +10,36 @@ public class OpingCountdown : MonoBehaviour
 
     private static OpingCountdown instance = null;
 
-    private TextMeshProUGUI countdownText;
+    public event Action CountdownStart;
 
+    public event Action CountdownFinished;
+
+    private bool isCountingDown = false;
+
+    private TextMeshProUGUI countdownText;
     // Start is called before the first frame update
     void Start()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            Debug.LogError("OpingCountdownのインスタンスが失敗しました。");
+        }
+
         countdownText = GetComponent<TextMeshProUGUI>();
-        //GameManager.Instance.OnGameStart += StartCountdown;
-        StartCountdown();
+        //gameObject.SetActive(false);
+        //StartCountdown();
+
+        //Generate();
+    }
+
+    void OnEnable()
+    {
+        
     }
 
     // Update is called once per frame
@@ -25,9 +48,19 @@ public class OpingCountdown : MonoBehaviour
         
     }
 
+    public void Generate()
+    {
+        gameObject.SetActive(true);
+        StartCountdown();
+    }
+
     public void StartCountdown()
     {
-        StartCoroutine(CountdownCoroutine());
+        if (!isCountingDown)
+        {
+            StartCoroutine(CountdownCoroutine());
+            isCountingDown = true;
+        }
     }
 
     IEnumerator CountdownCoroutine()
@@ -43,8 +76,14 @@ public class OpingCountdown : MonoBehaviour
         countdownText.text = "GameStart!";
         countdownText.fontSize = 96;
 
+        CountdownStart?.Invoke();
+
         yield return new WaitForSeconds(1);
 
+        CountdownFinished?.Invoke();
+
         gameObject.SetActive(false);
+
+        isCountingDown = false;
     }
 }

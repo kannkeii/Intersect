@@ -12,9 +12,10 @@ public class RestartButton : MonoBehaviour
         GetComponent<Button>().onClick.AddListener(() =>
         {
             //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            
-            SceneManager.LoadScene("Scenes/MainScene");
+
+            //SceneManager.LoadScene("Scenes/MainScene");
             RestartStage();
+            //OpingCountdown.Instance.Generate();
         }
         );
     }
@@ -27,9 +28,19 @@ public class RestartButton : MonoBehaviour
 
     void RestartStage()
     {
-        DeleteDontDestroyOnLoadObjcets();
-        AddScene.LoadScene("StageScene");
+
+        //GameManager.Instance?.UnsubEvents();
+        //DeleteDontDestroyOnLoadObjcets();
+        //SceneManager.UnloadSceneAsync("StageScene");
+        //AddScene.LoadScene("MainScene");
         //SceneManager.LoadScene("Scenes/StageScene");
+;
+        SceneManager.LoadScene("Scenes/MainScene");
+        AddScene.Instance.SceneArray.Clear();
+        AddScene.Instance.SceneArray.Add("StageScene");
+        //GameManager.Instance.oldGameMode = AddScene.GAME_MODE.GAME_MODE_TITLE;
+
+
     }
 
     void DeleteDontDestroyOnLoadObjcets()

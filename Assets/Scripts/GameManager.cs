@@ -6,19 +6,23 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    
+
     public delegate void GameStartHandler();
     public event GameStartHandler OnGameStart;
 
     public delegate void CreateTrainEvent();
 
-    public event CreateTrainEvent OnCreateTrainEvent;
+    //public event CreateTrainEvent OnCreateTrainEvent;
+
 
     public static GameManager Instance { get { return instance; } }//private set; }//読み込み（get）だけの場合、func{get;} = varが可能
 
     private static GameManager instance = null;
 
+    public AddScene.GAME_MODE oldGameMode;
 
-    //public Dictionary<string, bool> handlerStatus;
+    
 
     // Start is called before the first frame update
 
@@ -26,41 +30,60 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        oldGameMode = AddScene.gameMode;
+    }
 
-        //handlerStatus = new Dictionary<string, bool>();
+    private void OnCountdownStarted()
+    {
+        Debug.Log("OnCountdownStarted");
+        OpingCountdown.Instance.Generate();
+    }
 
-        //handlerStatus["Turntable::Generate"] = false;
-        //handlerStatus["GenerateTrack::Generate"] = false;
+    private void OnDestroy()
+    {
+        if (OpingCountdown.Instance != null)
+        {
+            OpingCountdown.Instance.CountdownStart -= OnCountdownStarted;
+            OpingCountdown.Instance.CountdownFinished -= GameStart;
+        }
+    }
 
+    public void UnsubEvents()
+    {
+        OnGameStart -= Turntable.Instance.Generate;
+
+        OnGameStart -= GenerateTrack.Instance.Generate;
+    }
+
+    void GameStart()
+    {
         OnGameStart += Turntable.Instance.Generate;
+
         OnGameStart += GenerateTrack.Instance.Generate;
-        //OnGameStart += OpingCountdown.Instance.StartCountdown;
+
         OnGameStart?.Invoke();
-        //StartCoroutine(BegainStatus());
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    //IEnumerator BegainStatus()
-    //{
-    //    while (true)
-    //    {
-    //        if(handlerStatus.All(status=> status.Value == true))
-    //        {
+        if(oldGameMode != AddScene.gameMode)
+        {
+            if (AddScene.gameMode == AddScene.GAME_MODE.GAME_MODE_PLAY)
+            {
+                if (OpingCountdown.Instance == null) return;
                 
-    //            break;
-    //        }
+                    OpingCountdown.Instance.CountdownStart += OnCountdownStarted;
 
-    //        yield return null;
-    //    }
+                    OpingCountdown.Instance.CountdownFinished += GameStart;
 
+                    OpingCountdown.Instance.Generate();
 
+                    //OpingCountdown.Instance.OnCountdownOver += GameStart;
+            }
 
-    //    yield break;
-    //}
+            oldGameMode = AddScene.gameMode;
+        }
+    }
 
 }
