@@ -1,20 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Turntable : MonoBehaviour
 {
     public static Vector3 LocalScale {get {return localScale;} }
 
-    public int roadNum;//æ“¾‚µ‚½‚¢À•W‚Ì”
+    public int roadMaxNum;//ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½Ìï¿½
 
     static Vector3 localScale = default;
 
     public GameObject RoadObject;
 
-    public static Turntable Instance { get { return instance; } }//private set; }//“Ç‚İ‚İigetj‚¾‚¯‚Ìê‡Afunc{get;} = var‚ª‰Â”\
+    public static Turntable Instance { get { return instance; } }//private set; }//ï¿½Ç‚İï¿½ï¿½İigetï¿½jï¿½ï¿½ï¿½ï¿½ï¿½Ìê‡ï¿½Afunc{get;} = varï¿½ï¿½ï¿½Â”\
 
     private static Turntable instance = null;
+
+    public delegate void RoadStatusChangedHandler(string roadName,bool isCanPass);
+
+    public event RoadStatusChangedHandler OnRoadStatusChanged;
 
     void OnEnable()
     {
@@ -25,7 +30,7 @@ public class Turntable : MonoBehaviour
         else
         {
             Destroy(gameObject);
-            Debug.LogError("Turntable‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ª¸”s‚µ‚Ü‚µ‚½B");
+            Debug.LogError("Turntableï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B");
         }
     }
 
@@ -33,6 +38,7 @@ public class Turntable : MonoBehaviour
     void Start()
     {
         localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        
     }
 
     // Update is called once per frame
@@ -46,18 +52,53 @@ public class Turntable : MonoBehaviour
         {
             transform.Rotate(transform.position,1);
         }
+        CheckAngle();
+
     }
+
+    void CheckAngle()
+    {
+        float tolerance = 6.0f; // ç²¾åº¦
+        float[] angles = new float[4];
+        angles[0] = 0f; // ä¸Š
+        angles[1] = 180f; // ä¸‹
+        angles[2] = 90f; // å·¦
+        angles[3] = 270f; // å³
+
+        foreach (Component com in GenerateTrack.Instance.roadsComponent)
+        {
+            OnRoadStatusChanged?.Invoke(com.name, false);
+        }
+
+            foreach (Component com in GenerateTrack.Instance.roadsComponent)
+        {
+            float angle = com.transform.rotation.eulerAngles.y;
+
+            foreach (float targetAngle in angles)
+            {
+                float adjustedTargetAngle = (targetAngle + transform.rotation.eulerAngles.y) % 360;
+
+                if (Mathf.Abs(angle - adjustedTargetAngle) < tolerance || Mathf.Abs(angle - adjustedTargetAngle - 180) < tolerance || Mathf.Abs(angle - adjustedTargetAngle + 180) < tolerance)
+                {
+
+                    OnRoadStatusChanged?.Invoke(com.name,true);
+                    break;
+                }
+            }
+        }
+    }
+
     public void Generate()
     {
         
-        float radius = transform.localScale.x;//‰~‚Ì”¼Œa
-        Vector2 center = new Vector2(transform.position.x, transform.position.z);//transform.position;//‰~‚Ì’†S
+        float radius = transform.localScale.x;//ï¿½~ï¿½Ì”ï¿½ï¿½a
+        Vector2 center = new Vector2(transform.position.x, transform.position.z);//transform.position;//ï¿½~ï¿½Ì’ï¿½ï¿½S
         
-        if (roadNum <= 0) roadNum = 2;
-        else if (roadNum % 2 != 0) roadNum++;
-        float minAngle = 20f;//“_‚Æ“_‚ÌÅ¬ŠÔŠu(Šp“x)
+        if (roadMaxNum <= 0) roadMaxNum = 2;
+        else if (roadMaxNum % 2 != 0) roadMaxNum++;
+        float minAngle = 45f;//ï¿½_ï¿½Æ“_ï¿½ÌÅï¿½ï¿½ÔŠu(ï¿½pï¿½x)
 
-        List<Vector2> points = CirclePointsGenerator.GeneratePoints(radius, center, roadNum, minAngle);
+        List<Vector2> points = CirclePointsGenerator.GeneratePoints(radius, center, roadMaxNum, minAngle);
 
         int roadCnt = 0;
         foreach (var point in points)
@@ -76,11 +117,27 @@ public class Turntable : MonoBehaviour
             transform.GetComponent<Road>().dir = dir;
 
             transform.parent = this.transform.parent;
+
             
             //transform.position = new Vector3(point.x, 0, point.y);
 
             //transform.GetChild(0).eulerAngles = new Vector3(0,  angleInDegrees, 0);
             transform.rotation = Quaternion.Euler(0, transform.rotation.y + angleInDegrees, 0);
+
+            transform.name = RoadObject.name + "_" + roadCnt;
+
+            Transform textObj = transform.Find("Canvas").GetChild(0);
+
+            TextMeshProUGUI text = textObj.GetComponent<TextMeshProUGUI>();
+
+            if (dir == Road.DIR.DIR_IN)
+            {
+                text.color = Color.yellow;
+            }else
+            {
+                text.color = Color.red;
+                textObj.gameObject.SetActive(false);
+            }
 
             //transform.GetChild(0).rotation = Quaternion.Euler(0, transform.GetChild(0).rotation.y+ angleInDegrees, 0);
             roadCnt++;

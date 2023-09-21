@@ -35,7 +35,6 @@ public class GameManager : MonoBehaviour
 
     private void OnCountdownStarted()
     {
-        Debug.Log("OnCountdownStarted");
         OpingCountdown.Instance.Generate();
     }
 

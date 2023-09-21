@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GenerateTrack : MonoBehaviour
@@ -14,7 +15,7 @@ public class GenerateTrack : MonoBehaviour
 
     private GameObject[] roads;
 
-    private List<StraightRoad> roadsComponent, comeRoadsComponent,outRoadComponent;
+    public List<StraightRoad> roadsComponent, comeRoadsComponent,outRoadComponent;
 
     private void Awake()
     {
@@ -93,25 +94,37 @@ public class GenerateTrack : MonoBehaviour
         int roadNum = Random.Range(0, comeRoadsComponent.Count-1);
         roadNum++;
         Debug.Log(roadNum);
+        int trainCnt = 0;
         for (int roadCnt =0;roadCnt< roadNum; roadCnt++)
         {
             if (comeRoadsComponent.Count <= 0) return;
 
             int comeRoadCnt = Random.Range(0, comeRoadsComponent.Count - 1);
 
-            Create(comeRoadCnt);
+            Create(comeRoadCnt, trainCnt);
+
+            trainCnt++;
+
+
+            Transform textObj = comeRoadsComponent[comeRoadCnt].transform.Find("Canvas").GetChild(0);
+
+            TextMeshProUGUI text = textObj.GetComponent<TextMeshProUGUI>();
+
+            text.color = Color.red;
 
             comeRoadsComponent.RemoveAt(comeRoadCnt);
 
         }
     }
 
-    private void Create(int roadCnt)
+    private void Create(int roadCnt,int trainCnt)
     {
         TrainFactory trainFactory = new DieselTrainFactory();
         GameObject dieselTrain = trainFactory.CreateTrain(trainPrefab);
         dieselTrain.transform.parent = this.transform.parent;
         dieselTrain.transform.position = comeRoadsComponent[roadCnt].endRoadTransform.position;
+        dieselTrain.name = trainPrefab.name + "_" + trainCnt;
+        dieselTrain.GetComponent<TrainMove>().actionMode = Train.ACTION_MODE.ACTION_MODE_WAIT_AT_ROAD;
         dieselTrain.transform.LookAt(this.transform.parent.position);
     }
 }
