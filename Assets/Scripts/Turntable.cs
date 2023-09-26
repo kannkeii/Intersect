@@ -13,8 +13,6 @@ public class Turntable : MonoBehaviour
 
     public GameObject RoadObject;
 
-
-
     public static Turntable Instance { get { return instance; } }//private set; }//�ǂݍ��݁iget�j�����̏ꍇ�Afunc{get;} = var���\
 
     private static Turntable instance = null;
@@ -29,7 +27,7 @@ public class Turntable : MonoBehaviour
 
     private bool haveTrainMoveToCenter;
 
-    private bool canTrainLeaveToCenter;
+    public bool canTrainLeaveToCenter;
 
     void OnEnable()
     {
@@ -127,6 +125,10 @@ public class Turntable : MonoBehaviour
                 if (angle < tolerance)
                 {
                     OnInsideTrainAngleChanged?.Invoke(t);
+
+                    canTrainLeaveToCenter = false;
+                    haveTrainMoveToCenter = false;
+
                 }
                 return;
             }
@@ -166,7 +168,7 @@ public class Turntable : MonoBehaviour
         canTrainLeaveToCenter = true;
     }
 
-    public void Generate()
+    public void GenerateLevel1()
     {
         
         float radius = transform.localScale.x;//�~�̔��a
@@ -210,8 +212,10 @@ public class Turntable : MonoBehaviour
 
             if (dir == Road.DIR.DIR_IN)
             {
-                text.color = Color.yellow;
-            }else
+                //text.color = Color.yellow;
+                textObj.gameObject.SetActive(false);
+            }
+            else
             {
                 text.color = Color.red;
                 textObj.gameObject.SetActive(false);
@@ -219,6 +223,22 @@ public class Turntable : MonoBehaviour
 
             //transform.GetChild(0).rotation = Quaternion.Euler(0, transform.GetChild(0).rotation.y+ angleInDegrees, 0);
             roadCnt++;
+        }
+    }
+
+    public void DestoryAllRoad()
+    {
+        foreach(Transform t in transform.parent)
+        {
+            if(t.CompareTag("Road"))
+            {
+                Destroy(t.gameObject);
+            }
+        }
+
+        foreach(GameObject obj in GameObject.FindGameObjectsWithTag("Train"))
+        {
+            Destroy(obj);
         }
     }
 }

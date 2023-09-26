@@ -245,10 +245,12 @@ MonoBehaviour:
   speed: 3
   endRoadTransform: {fileID: 0}
   currentTrack: {fileID: 0}
+  comeRoad: {fileID: 0}
   exitRoad: {fileID: 0}
   dir: 0
   actionMode: 2
   haveTrainMoveToCenter: 0
+  canBeLeaveFromCenter: 0
 --- !u!65 &3494163366800966079
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -309,7 +311,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ec43240eaaab014d9d4f75f5eacd6ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decreaseTime: 5
+  decreaseTime: 6
+  startColor: {r: 1, g: 1, b: 1, a: 1}
+  endColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1001 &7224734135665324864
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,21 +1,20 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class Stage : MonoBehaviour
+public class TurnUI : MonoBehaviour
 {
-
-    
+    public TextMeshProUGUI text;
     // Start is called before the first frame update
     void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
-        this.gameObject.tag = "DontDestroyOnLoad";
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        text.text = string.Format("TURN:{0}", GameManager.Instance.nowLevelIndex);
     }
 }

@@ -6,31 +6,45 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    
-
     public delegate void GameStartHandler();
     public event GameStartHandler OnGameStart;
 
     public delegate void CreateTrainEvent();
 
+    public static event Action OnCountdownFinished;
+
     //public event CreateTrainEvent OnCreateTrainEvent;
 
-
-    public static GameManager Instance { get { return instance; } }//private set; }//読み込み（get）だけの場合、func{get;} = varが可能
+    public static GameManager Instance { get { return instance; } }
 
     private static GameManager instance = null;
 
     public AddScene.GAME_MODE oldGameMode;
 
-    
+    public int nowLevelIndex = 0;//ターンIndex
 
-    // Start is called before the first frame update
+    public int thisLevelTrainAllNum = 0;//現在のターンの全列車数
 
-    //Awake->OnEnable->Start
+    public int thisLevelTrainNum = 0;//現在のターンの列車数
+
+
+    void OnEnable()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
         oldGameMode = AddScene.gameMode;
+
+        GameStart();
     }
 
     private void OnCountdownStarted()
@@ -40,49 +54,74 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (OpingCountdown.Instance != null)
+        //if (OpingCountdown.Instance != null)
         {
-            OpingCountdown.Instance.CountdownStart -= OnCountdownStarted;
-            OpingCountdown.Instance.CountdownFinished -= GameStart;
+            //OpingCountdown.Instance.CountdownStart -= OnCountdownStarted;
+            //OpingCountdown.Instance.CountdownFinished -= GameStart;
         }
     }
 
     public void UnsubEvents()
     {
-        OnGameStart -= Turntable.Instance.Generate;
-
-        OnGameStart -= GenerateTrack.Instance.Generate;
+        OnGameStart = null;
     }
 
     void GameStart()
     {
-        OnGameStart += Turntable.Instance.Generate;
+        UnsubEvents();
 
-        OnGameStart += GenerateTrack.Instance.Generate;
+        OnGameStart += Turntable.Instance.GenerateLevel1;
+        OnGameStart += GenerateTrack.Instance.GenerateLevel1;
 
-        OnGameStart?.Invoke();
+        StartCoroutine(WaitForOpingCountdown());
     }
 
-    // Update is called once per frame
+    IEnumerator WaitForOpingCountdown()
+    {
+        while (OpingCountdown.Instance == null)
+        {
+            yield return null;
+        }
+
+        
+        //OpingCountdown.Instance.CountdownStart += OnCountdownStarted;
+        //OpingCountdown.Instance.CountdownFinished += () =>
+        //{
+        //    OnGameStart?.Invoke();
+        //};
+        OpingCountdown.Instance.Generate();
+
+        OnCountdownFinished = null;
+
+        OnCountdownFinished += () =>
+        {
+            AudioController.Instance.PlayMusic(1);
+            OnGameStart?.Invoke();
+        };
+
+    }
+
     void Update()
     {
-        if(oldGameMode != AddScene.gameMode)
-        {
-            if (AddScene.gameMode == AddScene.GAME_MODE.GAME_MODE_PLAY)
-            {
-                if (OpingCountdown.Instance == null) return;
-                
-                    OpingCountdown.Instance.CountdownStart += OnCountdownStarted;
 
-                    OpingCountdown.Instance.CountdownFinished += GameStart;
-
-                    OpingCountdown.Instance.Generate();
-
-                    //OpingCountdown.Instance.OnCountdownOver += GameStart;
-            }
-
-            oldGameMode = AddScene.gameMode;
-        }
     }
 
+
+    public void GameOver()
+    {
+
+        Turntable.Instance.DestoryAllRoad();
+
+        GenerateTrack.Instance.roadsComponent.Clear();
+
+        GenerateTrack.Instance.comeRoadsComponent.Clear();
+        GenerateTrack.Instance.outRoadComponent.Clear();
+
+        GameStart();
+    }
+
+    public void TriggerOnCountdownFinished()
+    {
+        OnCountdownFinished?.Invoke();
+    }
 }

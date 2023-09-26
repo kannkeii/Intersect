@@ -6,6 +6,8 @@ public class AudioController : MonoBehaviour
 {
     public static AudioController Instance { get { return instance; } set { instance = value; } }
 
+    public static  List<AudioClip> musicList = new List<AudioClip>();
+
     private static AudioController instance = null;
 
     private AudioSource audioSource;
@@ -30,7 +32,13 @@ public class AudioController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (musicList.Count <= 0)
+        {
+            musicList.Add(Resources.Load<AudioClip>("Music/放課後はお菓子でもつまみながら的なBGM"));
+            musicList.Add(Resources.Load<AudioClip>("Music/昼下がりのお遊戯的なBGM"));
+            musicList.Add(Resources.Load<AudioClip>("Music/thank-you-21604"));
+            musicList.Add(Resources.Load<AudioClip>("Music/countdown-sound-effect-8-bit-151797"));
+        }
     }
 
     // Update is called once per frame
@@ -47,5 +55,11 @@ public class AudioController : MonoBehaviour
     public void Change()
     {
         audioSource.mute = !audioSource.mute;
+    }
+
+    public void PlayMusic(int musicCnt)
+    {
+        audioSource.clip = musicList[musicCnt];
+        audioSource.Play();
     }
 }

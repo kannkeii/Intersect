@@ -12,7 +12,7 @@ public class OpingCountdown : MonoBehaviour
 
     public event Action CountdownStart;
 
-    public event Action CountdownFinished;
+    //public event Action CountdownFinished;
 
     private bool isCountingDown = false;
 
@@ -50,6 +50,10 @@ public class OpingCountdown : MonoBehaviour
 
     public void Generate()
     {
+        //if ()
+        {
+            AudioController.Instance.PlayMusic(3);
+        }
         gameObject.SetActive(true);
         StartCountdown();
     }
@@ -65,7 +69,7 @@ public class OpingCountdown : MonoBehaviour
 
     IEnumerator CountdownCoroutine()
     {
-        int countdown = 5;
+        int countdown = 3;
         while (countdown > 0)
         {
             countdownText.text = countdown.ToString();
@@ -80,7 +84,7 @@ public class OpingCountdown : MonoBehaviour
 
         yield return new WaitForSeconds(1);
 
-        CountdownFinished?.Invoke();
+        GameManager.Instance.TriggerOnCountdownFinished();
 
         gameObject.SetActive(false);
 

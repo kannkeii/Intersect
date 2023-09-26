@@ -13,7 +13,7 @@ public class GenerateTrack : MonoBehaviour
 
     public GameObject trainPrefab;
 
-    private GameObject[] roads;
+    public GameObject[] roads;
 
     public List<StraightRoad> roadsComponent, comeRoadsComponent,outRoadComponent;
 
@@ -58,7 +58,7 @@ public class GenerateTrack : MonoBehaviour
         
     }
 
-    public void Generate()
+    public void GenerateLevel1()
     {
         roads = GameObject.FindGameObjectsWithTag("Road");
 
@@ -70,6 +70,11 @@ public class GenerateTrack : MonoBehaviour
         GetComeOutRoad();
 
         Create();
+    }
+
+    public void GenerateLevel2()
+    {
+
     }
 
     private void GetComeOutRoad()
@@ -90,8 +95,8 @@ public class GenerateTrack : MonoBehaviour
     {
         if (comeRoadsComponent.Count <= 0 || outRoadComponent.Count <= 0) return;
 
-        
-        int roadNum = Random.Range(0, comeRoadsComponent.Count-1);
+
+        int roadNum = 1;//Random.Range(0, comeRoadsComponent.Count-1);
         roadNum++;
         Debug.Log(roadNum);
         int trainCnt = 0;
@@ -107,15 +112,17 @@ public class GenerateTrack : MonoBehaviour
 
             trainCnt++;
 
-
-            Transform comRoadObj = comeRoadsComponent[comeRoadCnt].transform.Find("Canvas").GetChild(0);
-
+            Transform c = comeRoadsComponent[comeRoadCnt].transform.Find("Canvas");
+            
+            Transform comRoadObj = c.GetChild(0);
+            comRoadObj.gameObject.SetActive(true);
             TextMeshProUGUI comRoadText = comRoadObj.GetComponent<TextMeshProUGUI>();
-
+            
             comRoadText.color = Color.red;
 
             comeRoadsComponent.RemoveAt(comeRoadCnt);
 
+            break;
         }
     }
 
@@ -125,10 +132,14 @@ public class GenerateTrack : MonoBehaviour
         GameObject dieselTrain = trainFactory.CreateTrain(trainPrefab);
         dieselTrain.transform.parent = this.transform.parent;
         dieselTrain.transform.position = comeRoadsComponent[enterRoadCnt].endRoadTransform.position;
+        dieselTrain.GetComponent<TrainMove>().comeRoad = comeRoadsComponent[enterRoadCnt].gameObject;
         dieselTrain.GetComponent<TrainMove>().exitRoad = outRoadComponent[exitRoadCnt].gameObject;
         dieselTrain.GetComponent<TrainMove>().endRoadTransform = outRoadComponent[exitRoadCnt].endRoadTransform;
         dieselTrain.name = trainPrefab.name + "_" + trainCnt;
         dieselTrain.GetComponent<TrainMove>().actionMode = Train.ACTION_MODE.ACTION_MODE_WAIT_AT_ROAD;
         dieselTrain.transform.LookAt(this.transform.parent.position);
+        GameManager.Instance.thisLevelTrainAllNum++;
     }
+
+    
 }

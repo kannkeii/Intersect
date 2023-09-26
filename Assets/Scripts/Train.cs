@@ -14,6 +14,8 @@ public class Train : MonoBehaviour
 
     const float angleThreshold = 90f;
 
+    public GameObject comeRoad;
+
     public GameObject exitRoad;
 
     
