@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Turntable : MonoBehaviour
 {
-    public static Vector3 LocalScale {get {return localScale;} }
+    public static Vector3 LocalScale { get { return localScale; } }
 
     public int roadMaxNum;//�擾���������W�̐�
 
@@ -13,13 +13,23 @@ public class Turntable : MonoBehaviour
 
     public GameObject RoadObject;
 
+
+
     public static Turntable Instance { get { return instance; } }//private set; }//�ǂݍ��݁iget�j�����̏ꍇ�Afunc{get;} = var���\
 
     private static Turntable instance = null;
 
-    public delegate void RoadStatusChangedHandler(string roadName,bool isCanPass);
+    public delegate void RoadStatusChangedHandler(string roadName, string exitName, bool isCanPass);
 
     public event RoadStatusChangedHandler OnRoadStatusChanged;
+
+    public delegate void InsideTrainAngleChangedHandler(Transform trainTransform);
+
+    public event InsideTrainAngleChangedHandler OnInsideTrainAngleChanged;
+
+    private bool haveTrainMoveToCenter;
+
+    private bool canTrainLeaveToCenter;
 
     void OnEnable()
     {
@@ -38,21 +48,26 @@ public class Turntable : MonoBehaviour
     void Start()
     {
         localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
-        
+        haveTrainMoveToCenter = false;
+        canTrainLeaveToCenter = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
-            transform.Rotate(transform.position,-1);
-        }else
-            if(Input.GetKey(KeyCode.RightArrow))
+            transform.Rotate(transform.position, -1);
+        } else
+            if (Input.GetKey(KeyCode.RightArrow))
         {
-            transform.Rotate(transform.position,1);
+            transform.Rotate(transform.position, 1);
         }
-        CheckAngle();
+
+        if(canTrainLeaveToCenter == false)
+            CheckAngle();
+        else
+            CheckAngle2();
 
     }
 
@@ -67,10 +82,12 @@ public class Turntable : MonoBehaviour
 
         foreach (Component com in GenerateTrack.Instance.roadsComponent)
         {
-            OnRoadStatusChanged?.Invoke(com.name, false);
+            if (setRoad(com.name, false)) continue;
+
+            OnRoadStatusChanged?.Invoke(com.name, default, false);
         }
 
-            foreach (Component com in GenerateTrack.Instance.roadsComponent)
+        foreach (Component com in GenerateTrack.Instance.roadsComponent)
         {
             float angle = com.transform.rotation.eulerAngles.y;
 
@@ -80,12 +97,73 @@ public class Turntable : MonoBehaviour
 
                 if (Mathf.Abs(angle - adjustedTargetAngle) < tolerance || Mathf.Abs(angle - adjustedTargetAngle - 180) < tolerance || Mathf.Abs(angle - adjustedTargetAngle + 180) < tolerance)
                 {
+                    if (haveTrainMoveToCenter == false)
+                    {
+                        if (setRoad(com.name, true)) continue;
 
-                    OnRoadStatusChanged?.Invoke(com.name,true);
+                        OnRoadStatusChanged?.Invoke(com.name, default, true);
+                    }
                     break;
                 }
             }
         }
+    }
+
+    void CheckAngle2()
+    {
+        float tolerance = 6.0f; // 精度
+
+        foreach(Transform t in transform)
+        {
+            if(t.CompareTag("Train"))
+            {
+                Vector3 dir = t.GetComponent<TrainMove>().endRoadTransform.position - t.transform.position;
+
+                dir.Normalize();
+
+                float angle = Vector3.Angle(t.transform.forward, dir);
+
+
+                if (angle < tolerance)
+                {
+                    OnInsideTrainAngleChanged?.Invoke(t);
+                }
+                return;
+            }
+        }
+    }
+
+    bool setRoad(string enterRoad,bool flag)
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.CompareTag("Train"))
+            {
+                Train train = child.GetComponent<Train>();
+
+                OnRoadStatusChanged?.Invoke(enterRoad, train.exitRoad.name, flag);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void HaveTrainMoveToCenter(GameObject obj)
+    {
+        Debug.Log("HaveTrainMoveToCenter_Turntable");
+        haveTrainMoveToCenter = true;
+        //
+        //if (name != transform.name)
+        //{
+        //    haveTrainMoveToCenter = true;
+        //}
+    }
+
+    void CanTrainLeaveToCenter(GameObject obj)
+    {
+        Debug.Log("CanTrainLeaveToCenter_Turntable");
+        canTrainLeaveToCenter = true;
     }
 
     public void Generate()

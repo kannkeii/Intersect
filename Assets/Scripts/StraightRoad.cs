@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class StraightRoad : Road
@@ -9,7 +10,7 @@ public class StraightRoad : Road
     {
         Turntable.Instance.OnRoadStatusChanged += HandleRoadStatusChanged;
         canPassCenter = false;
-        endRoadTransform = transform.GetChild(transform.childCount-1);
+        endRoadTransform = transform.GetChild(transform.childCount-2);
     }
 
     void OnDestroy()
@@ -23,9 +24,34 @@ public class StraightRoad : Road
 
     }
 
-    public void HandleRoadStatusChanged(string roadName,bool isCanPass)
+    public void HandleRoadStatusChanged(string passRoadName,string exitRoadName, bool isCanPass)
     {
-        if(roadName == transform.name)
+        Debug.Log("passRoadName:" + passRoadName + ",exitRoadName:" + exitRoadName);
+
+        if(passRoadName == transform.name)
             canPassCenter = isCanPass;
+        if (exitRoadName == transform.name)
+            ChangeRoadText(exitRoadName);
+
+    }
+
+    private void ChangeRoadText(string roadName)
+    {
+        Transform textObj = transform.Find("Canvas").GetChild(0);
+
+        TextMeshProUGUI text = textObj.GetComponent<TextMeshProUGUI>();
+
+        
+
+        if (dir == Road.DIR.DIR_IN)
+        {
+            Debug.Log("RoadError");
+        }
+        else
+        {
+            textObj.gameObject.SetActive(true);
+            text.color = Color.green;
+            text.text = "Å´";
+        }
     }
 }

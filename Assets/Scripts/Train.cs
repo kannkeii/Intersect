@@ -14,6 +14,11 @@ public class Train : MonoBehaviour
 
     const float angleThreshold = 90f;
 
+    public GameObject exitRoad;
+
+    
+
+
     public enum ACTION_MODE
     {
         ACTION_MODE_WAIT_AT_ROAD,
@@ -21,6 +26,8 @@ public class Train : MonoBehaviour
         ACTION_MODE_WAIT_AT_CENTER,
         ACTION_MODE_RUNING,
         ACTION_MODE_RUNING2,
+        //ACTION_MODE_RUNING_TO_OUT,
+        ACTION_MODE_RUNING3
     }
 
     public enum DIR
