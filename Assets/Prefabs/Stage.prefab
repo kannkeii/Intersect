@@ -60,6 +60,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   oldGameMode: 0
+  currentLevel: 3
+  trainAllNum: 0
+  nowLevel: 0
 --- !u!1 &3309621281844713315
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,7 +307,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5810965656478174778, guid: 03ca017db2bc5d543a33311abf259941, type: 3}
       propertyPath: roadMaxNum
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

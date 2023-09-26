@@ -6,7 +6,6 @@ using UnityEngine;
 public class TrainMove :Train
 {
     public event Action OnWaitAtRoadEnd;
-    //public event System.Action OnNotWaitAtRoadEnd;
 
     private Vector3 tagetPosition;
 
@@ -17,6 +16,7 @@ public class TrainMove :Train
     // Start is called before the first frame update
     void Start()
     {
+        actionMode = ACTION_MODE.ACTION_MODE_RUNING;
         Turntable.Instance.OnInsideTrainAngleChanged += HandleInsideTrainAngleChanged;
         tagetPosition = new Vector3(tagetPosition.x, transform.position.y, tagetPosition.z);
         dir = DIR.DIR_IN;
@@ -24,7 +24,6 @@ public class TrainMove :Train
         atPlayer = false;
         haveTrainMoveToCenter = false;
         canBeLeaveFromCenter = false;
-        //actionMode = ACTION_MODE.ACTION_MODE_WAIT_AT_ROAD;
     }
 
     private void HandleInsideTrainAngleChanged(Transform trainTransform)
@@ -75,6 +74,17 @@ public class TrainMove :Train
         }
     }
 
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other == null)
+    //        return;
+
+    //    if (other.tag == "Player")
+    //    {
+    //        comeRoad.GetComponent<StraightRoad>().canPassCenter = true;
+    //    }
+    //}
+
 
     void OnTriggerStay(Collider other)
     {
@@ -104,6 +114,31 @@ public class TrainMove :Train
 
                 transform.LookAt(tagetPosition);
 
+                Vector2 trainVec2 = new Vector2(transform.position.x, transform.position.z);
+                Vector2 endVec2 = new Vector2(tagetPosition.x, tagetPosition.z);
+
+                float dis = Vector2.Distance(trainVec2, endVec2);
+
+                if (dis < .6f)
+                {
+                    speed = 0;
+
+                    GameManager.Instance.thisLevelTrainNum++;
+
+                    if (GameManager.Instance.thisLevelTrainNum >= GameManager.Instance.thisLevelTrainAllNum)
+                    {
+                        GameManager.Instance.thisLevelTrainNum = 0;
+
+                        GameManager.Instance.thisLevelTrainAllNum = 0;
+
+                        GameManager.Instance.nowLevelIndex++;
+
+                        GameManager.Instance.GameOver();
+                    }
+
+                    Destroy(gameObject);
+                }
+
                 return;
             }
 
@@ -125,35 +160,6 @@ public class TrainMove :Train
 
                 actionMode = ACTION_MODE.ACTION_MODE_RUNING3;
 
-                ////Vector2 trainVec2 = new Vector2(transform.position.x, transform.position.z);
-
-                ////Vector3 lwVec3 = transform.TransformPoint(exitRoad.transform.position);
-                ////Vector2 roadEndVec2 = new Vector2(lwVec3.x, lwVec3.z);
-
-                ////Vector2 roadEndVec2 = new Vector2(exitRoad.transform.position.x, exitRoad.transform.position.z);
-
-                //Vector3 lwVec3 = transform.TransformPoint(transform.position);
-                //Vector2 trainVec2 = new Vector2(lwVec3.x, lwVec3.z);
-
-                //lwVec3 = transform.TransformPoint(exitRoad.transform.position);
-                //Vector2 roadEndVec2 = new Vector2(lwVec3.x, lwVec3.z);
-
-
-                //float dis = Vector2.Distance(trainVec2, roadEndVec2);
-
-                //if (dis < .6f)
-                //{
-                //    speed = defaultSpeed;
-
-
-
-                //    //transform.parent = other.transform.parent;
-
-                //    //actionMode = ACTION_MODE.ACTION_MODE_RUNING3;
-                //    //transform.parent = other.transform;
-                //    //speed = 0;
-                //}
-
                 return;
             }
         }
@@ -162,36 +168,10 @@ public class TrainMove :Train
 
         if (other.tag == "Player")
         {
-            //if(actionMode == ACTION_MODE.ACTION_MODE_WAIT_AT_CENTER)
-            //{
-                
-
-            //    Vector2 trainVec2 = new Vector2(transform.position.x, transform.position.z);
-
-            //    Vector3 lwVec3 = transform.TransformPoint(exitRoad.transform.position);
-            //    Vector2 roadEndVec2 = new Vector2(lwVec3.x, lwVec3.z);
-
-            //    float dis = Vector2.Distance(trainVec2, roadEndVec2);
-            //    Debug.Log(dis);
-            //    //if (dis < .6f)
-            //    //{
-            //    //    speed = defaultSpeed;
-
-            //    //    dir = DIR.DIR_OUT;
-
-            //    //    transform.parent = other.transform.parent;
-
-            //    //    //actionMode = ACTION_MODE.ACTION_MODE_RUNING3;
-            //    //    //transform.parent = other.transform;
-            //    //    //speed = 0;
-            //    //}
-
-            //    return;
-            //}
-
             atPlayer = true;
             if (actionMode == ACTION_MODE.ACTION_MODE_RUNING)
             {
+                OnWaitAtRoadEnd?.Invoke();
                 actionMode = ACTION_MODE.ACTION_MODE_WAIT_AT_ROAD_END;
                 speed = 0;
                 return;
@@ -199,36 +179,16 @@ public class TrainMove :Train
 
             if(actionMode == ACTION_MODE.ACTION_MODE_WAIT_AT_ROAD_END)
             {
-                OnWaitAtRoadEnd?.Invoke();
-
-                //actionMode = ACTION_MODE.ACTION_MODE_RUNING_TO_OUT;
+                
 
                 return;
             }
-
-            //if(actionMode == ACTION_MODE.ACTION_MODE_RUNING_TO_OUT)
-            //{
-                
-            //    Vector2 trainVec2 = new Vector2(transform.position.x, transform.position.z);
-            //    Vector2 roadEndVec2 = new Vector2(exitRoad.transform.position.x, exitRoad.transform.position.z);
-
-            //    float dis = Vector2.Distance(trainVec2, roadEndVec2);
-            //    Debug.Log(dis);
-            //    if (dis < .6f)
-            //    {
-            //        speed = defaultSpeed;
-            //        actionMode = ACTION_MODE.ACTION_MODE_RUNING3;
-            //        //transform.parent = other.transform;
-            //        //speed = 0;
-            //    }
-            //    return;
-            //}
 
             if (actionMode == ACTION_MODE.ACTION_MODE_RUNING2)
             {
                 if (haveTrainMoveToCenter == true)
                 {
-                    other.GetComponent<StraightRoad>().canPassCenter = false;
+                    //other.GetComponent<StraightRoad>().canPassCenter = false;
                     actionMode = ACTION_MODE.ACTION_MODE_WAIT_AT_ROAD_END;
                     return;
                 }
