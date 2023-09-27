@@ -98,7 +98,7 @@ public class GenerateTrack : MonoBehaviour
 
         int roadNum = 1;//Random.Range(0, comeRoadsComponent.Count-1);
         roadNum++;
-        Debug.Log(roadNum);
+        //Debug.Log(roadNum);
         int trainCnt = 0;
         for (int roadCnt =0;roadCnt< roadNum; roadCnt++)
         {
@@ -138,7 +138,14 @@ public class GenerateTrack : MonoBehaviour
         dieselTrain.name = trainPrefab.name + "_" + trainCnt;
         dieselTrain.GetComponent<TrainMove>().actionMode = Train.ACTION_MODE.ACTION_MODE_WAIT_AT_ROAD;
         dieselTrain.transform.LookAt(this.transform.parent.position);
-        GameManager.Instance.thisLevelTrainAllNum++;
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.thisLevelTrainAllNum++;
+        }else
+        {
+            Debug.LogError("GameManagerインスタンス失敗");
+        }
     }
 
     

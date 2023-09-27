@@ -7,14 +7,24 @@ public class ChangeScene : MonoBehaviour
 {
     public string Scene;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        TitleAnyKeyInput.Instance.OnAnyKeyDownHandler += () => { SceneManager.LoadScene(Scene); };//LoadSceneAsync
+        TitleAnyKeyInput.Instance.OnAnyKeyDownHandler += LoadScene;
+    }
+
+    private void OnDestroy()
+    {
+        TitleAnyKeyInput.Instance.OnAnyKeyDownHandler -= LoadScene;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void LoadScene()
+    {
+        SceneManager.LoadSceneAsync(Scene);
     }
 }

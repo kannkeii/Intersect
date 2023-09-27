@@ -14,11 +14,16 @@ public static class CirclePointsGenerator
     public static List<Vector2> GeneratePoints(float radius, Vector2 center, int roadNum, float minAngle)
     {
         List<Vector2> points = new List<Vector2>();
+        int maxAttempts = roadNum * 10;
+
         for (int i = 0; i < roadNum; i++)
         {
             Vector2 point;//À•W
             float angle;//—”Šp“x
             bool isValid;//¬Œ÷”»’è
+
+            int attempts = 0;
+
             do
             {
                 isValid = true;
@@ -27,10 +32,18 @@ public static class CirclePointsGenerator
                 foreach (Vector2 p in points)
                 {
                     float angleBetweenPoints = Vector2.Angle(p - center, point - center);
-                    if (angleBetweenPoints < minAngle)
+
+                    if (angleBetweenPoints < minAngle)//“¹˜H“¯Žm‚Í‹ß‚·‚¬‚È‚¢‚æ‚¤‚É”»’fA‹ß‚·‚¬‚é‚ÆÀ•W‚ðÄ¶¬‚·‚é
                     {
                         isValid = false;
                         break;
+                    }
+
+                    attempts++;
+                    if (attempts > maxAttempts)
+                    {
+                        Debug.Log("Can not get generate road points");
+                        return points;
                     }
                 }
             } while (!isValid);

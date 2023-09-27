@@ -5,19 +5,21 @@ using UnityEngine.UI;
 
 public class ExitButton : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private Button button;
+
+    private void Awake()
     {
-        GetComponent<Button>().onClick.AddListener(()=>
-        {
-            Application.Quit();
-        }
-        );
+        button = GetComponent<Button>();
+        button.onClick.AddListener(OnButtonClick);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDestroy()
     {
-        
+        button.onClick.RemoveListener(OnButtonClick);
+    }   
+
+    private void OnButtonClick()
+    {
+        Application.Quit();
     }
 }

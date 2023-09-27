@@ -37,6 +37,11 @@ public class OpingCountdown : MonoBehaviour
         //Generate();
     }
 
+    void OnDestroy()
+    {
+        CountdownStart = null;
+    }
+
     void OnEnable()
     {
         

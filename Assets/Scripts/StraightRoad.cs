@@ -26,7 +26,7 @@ public class StraightRoad : Road
 
     public void HandleRoadStatusChanged(string passRoadName,string exitRoadName, bool isCanPass)
     {
-        Debug.Log("passRoadName:" + passRoadName + ",exitRoadName:" + exitRoadName);
+        //Debug.Log("passRoadName:" + passRoadName + ",exitRoadName:" + exitRoadName+",Time:"+Time.deltaTime);
 
         if(passRoadName == transform.name)
             canPassCenter = isCanPass;

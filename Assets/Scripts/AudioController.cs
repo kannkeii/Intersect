@@ -14,19 +14,21 @@ public class AudioController : MonoBehaviour
 
     private void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
+
         if (instance == null)
         {
             instance = this;
         }
         else
         {
+            audioSource.Stop();
             Destroy(gameObject);
             Debug.LogError("AudioControllerのインスタンスが失敗しました。");
         }
 
         //DontDestroyOnLoad(this.gameObject);
         //this.gameObject.tag = "DontDestroyOnLoad";
-        audioSource = GetComponent<AudioSource>();
     }
 
     // Start is called before the first frame update
@@ -34,11 +36,15 @@ public class AudioController : MonoBehaviour
     {
         if (musicList.Count <= 0)
         {
-            musicList.Add(Resources.Load<AudioClip>("Music/放課後はお菓子でもつまみながら的なBGM"));
-            musicList.Add(Resources.Load<AudioClip>("Music/昼下がりのお遊戯的なBGM"));
-            musicList.Add(Resources.Load<AudioClip>("Music/thank-you-21604"));
-            musicList.Add(Resources.Load<AudioClip>("Music/countdown-sound-effect-8-bit-151797"));
+            StartCoroutine(LoadAudioClips());
         }
+        //if (musicList.Count <= 0)
+        //{
+        //    musicList.Add(Resources.Load<AudioClip>("Music/放課後はお菓子でもつまみながら的なBGM"));
+        //    musicList.Add(Resources.Load<AudioClip>("Music/昼下がりのお遊戯的なBGM"));
+        //    musicList.Add(Resources.Load<AudioClip>("Music/thank-you-21604"));
+        //    musicList.Add(Resources.Load<AudioClip>("Music/countdown-sound-effect-8-bit-151797"));
+        //}
     }
 
     // Update is called once per frame
@@ -61,5 +67,17 @@ public class AudioController : MonoBehaviour
     {
         audioSource.clip = musicList[musicCnt];
         audioSource.Play();
+    }
+
+    private IEnumerator LoadAudioClips()
+    {
+        musicList.Add(Resources.Load<AudioClip>("Music/放課後はお菓子でもつまみながら的なBGM"));
+        yield return null;
+        musicList.Add(Resources.Load<AudioClip>("Music/昼下がりのお遊戯的なBGM"));
+        yield return null;
+        musicList.Add(Resources.Load<AudioClip>("Music/thank-you-21604"));
+        yield return null;
+        musicList.Add(Resources.Load<AudioClip>("Music/countdown-sound-effect-8-bit-151797"));
+        yield return null;
     }
 }

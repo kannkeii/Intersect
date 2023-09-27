@@ -27,7 +27,7 @@ public class Turntable : MonoBehaviour
 
     private bool haveTrainMoveToCenter;
 
-    public bool canTrainLeaveToCenter;
+    private bool canTrainLeaveToCenter;
 
     void OnEnable()
     {
@@ -62,8 +62,10 @@ public class Turntable : MonoBehaviour
             transform.Rotate(transform.position, 1);
         }
 
-        if(canTrainLeaveToCenter == false)
+        if (canTrainLeaveToCenter == false)
+        {
             CheckAngle();
+        }
         else
             CheckAngle2();
 
@@ -71,7 +73,7 @@ public class Turntable : MonoBehaviour
 
     void CheckAngle()
     {
-        float tolerance = 6.0f; // 精度
+        float tolerance = 9.0f; // 精度
         float[] angles = new float[4];
         angles[0] = 0f; // 上
         angles[1] = 180f; // 下
@@ -82,6 +84,7 @@ public class Turntable : MonoBehaviour
         {
             if (setRoad(com.name, false)) continue;
 
+            //Debug.Log("passRoadName:" + com.name + ",exitRoadName:?"+ ",Time:" + Time.deltaTime);
             OnRoadStatusChanged?.Invoke(com.name, default, false);
         }
 
@@ -97,8 +100,9 @@ public class Turntable : MonoBehaviour
                 {
                     if (haveTrainMoveToCenter == false)
                     {
-                        if (setRoad(com.name, true)) continue;
+                        //if (setRoad(com.name, true)) continue;
 
+                        //Debug.Log("passRoadName:" + com.name + ",exitRoadName:?" +  ",Time:" + Time.deltaTime);
                         OnRoadStatusChanged?.Invoke(com.name, default, true);
                     }
                     break;
@@ -109,7 +113,7 @@ public class Turntable : MonoBehaviour
 
     void CheckAngle2()
     {
-        float tolerance = 6.0f; // 精度
+        float tolerance = 9.0f; // 精度
 
         foreach(Transform t in transform)
         {
@@ -141,8 +145,9 @@ public class Turntable : MonoBehaviour
         {
             if (child.CompareTag("Train"))
             {
+                
                 Train train = child.GetComponent<Train>();
-
+                //Debug.Log(train.exitRoad.name);
                 OnRoadStatusChanged?.Invoke(enterRoad, train.exitRoad.name, flag);
                 return true;
             }
@@ -153,7 +158,7 @@ public class Turntable : MonoBehaviour
 
     void HaveTrainMoveToCenter(GameObject obj)
     {
-        Debug.Log("HaveTrainMoveToCenter_Turntable");
+        //Debug.Log("HaveTrainMoveToCenter_Turntable");
         haveTrainMoveToCenter = true;
         //
         //if (name != transform.name)
@@ -164,7 +169,7 @@ public class Turntable : MonoBehaviour
 
     void CanTrainLeaveToCenter(GameObject obj)
     {
-        Debug.Log("CanTrainLeaveToCenter_Turntable");
+        //Debug.Log("CanTrainLeaveToCenter_Turntable");
         canTrainLeaveToCenter = true;
     }
 

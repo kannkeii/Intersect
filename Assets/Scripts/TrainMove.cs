@@ -10,8 +10,8 @@ public class TrainMove :Train
     private Vector3 tagetPosition;
 
     private bool atPlayer;
-    public bool haveTrainMoveToCenter;
-    public bool canBeLeaveFromCenter;
+    private bool haveTrainMoveToCenter;
+    private bool canBeLeaveFromCenter;
 
     // Start is called before the first frame update
     void Start()
@@ -67,7 +67,7 @@ public class TrainMove :Train
 
     void HaveTrainMoveToCenter(string name)
     {
-        Debug.Log("HaveTrainMoveToCenter:"+ name);
+        //Debug.Log("HaveTrainMoveToCenter:"+ name);
         if(name != transform.name)
         {
             haveTrainMoveToCenter = true;
