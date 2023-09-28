@@ -92,7 +92,7 @@ OnCountdownFinished += () =>//実行したいメンバーを追加
 OnCountdownFinished?.Invoke();//追加されたメンバーを全部実行
 ```
 
-今回の制作はメッセージシステム(SendMessage)を少し使っています。
+今回の制作はメッセージシステム(SendMessage)を少し使っています。  
 利用イメージは
 -送信側
 ```
