@@ -12,6 +12,7 @@
 ・Singleton
 
 サンプルコードは
+```
 public static AudioController Instance { get { return instance; } set { instance = value; } }
 //...
 private void Awake()
@@ -26,10 +27,13 @@ private void Awake()
         Debug.LogError("AudioControllerのインスタンスが失敗しました。");
     }
 }
+```
 のようになります。
 
 利用サンプルは
+```
 AudioController.Instance.メンバー
+```
 のようになります。
 
 今の段階はinstanceのクラスのようなものを作ってありません。
@@ -38,37 +42,46 @@ AudioController.Instance.メンバー
 https://github.com/kannkeii/Intersect/tree/master/Assets/Scripts/TrainFactory
 
 利用サンプルは
+```
 https://github.com/kannkeii/Intersect/blob/master/Assets/Scripts/GenerateTrack.cs
 private void Create(int enterRoadCnt, int exitRoadCnt, int trainCnt)
 {
     TrainFactory trainFactory = new DieselTrainFactory();
     GameObject dieselTrain = trainFactory.CreateTrain(trainPrefab);
 }
+```
 のようになります。
 初版の列車も、鉄道もただ一種類であります。これから増やす場合は活用できるでしょう。
 
 ・その他
 今回の制作はイベント(delegate,action,event,func)を大量使っています。
 個人的にまとめた各の関係は
+```
                      →略書き→action→略書き→func
 delegate(オリジナル)→|
                      →権限制限→event
+```
 
-利用イメージは
--delegate//実行する時、戻り値がない場合
+利用イメージは  
+-delegate、実行する時、戻り値がない場合
+```
 public delegate void GameStartHandler();
 public event GameStartHandler OnGameStart;
 OnGameStart += Turntable.Instance.GenerateLevel1;//実行したいメンバー追加
 OnGameStart?.Invoke();//追加されたメンバーを全部実行
 OnGameStart -= Turntable.Instance.GenerateLevel1;//実行したいメンバー削減
 OnGameStart = null;//追加されたメンバーを全部削減
+```
 
--delegate2//実行する時、戻り値がある場合
+-delegate2、実行する時、戻り値がある場合
+```
 public delegate void RoadStatusChangedHandler(string roadName, string exitName, bool isCanPass);
 public event RoadStatusChangedHandler OnRoadStatusChanged;
 OnRoadStatusChanged?.Invoke(com.name, default, false);
+```
 
 -action
+```
 public static event Action OnCountdownFinished;
 OnCountdownFinished += () =>//実行したいメンバーを追加
 {
@@ -77,14 +90,16 @@ OnCountdownFinished += () =>//実行したいメンバーを追加
 };
 
 OnCountdownFinished?.Invoke();//追加されたメンバーを全部実行
+```
 
 今回の制作はメッセージシステム(SendMessage)を少し使っています。
 利用イメージは
 -送信側
+```
 GameObjcet taget
 taget.SendMessage("受ける側関数名","送信内容", //送信内容の部分は複数種類な変数が入れられます。
                   SendMessageOptions.DontRequireReceiver);//受ける側が見つからない場合のエラーメッセージはなしにします。
-
+```
 
 ## ゲームの説明
 ゲーム開始後ランタイムで鉄道を複数生成し、ユーザーはキーボードの左右矢印ボタンを押して画面真ん中の転車台を操作し、鉄道に赤い矢印を沿ってくる列車を誘導して緑矢印がある鉄道へ移動するゲームです。
