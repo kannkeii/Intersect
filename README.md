@@ -53,7 +53,7 @@ private void Create(int enterRoadCnt, int exitRoadCnt, int trainCnt)
 のようになります。
 初版の列車も、鉄道もただ一種類であります。これから増やす場合は活用できるでしょう。
 
-・その他
+・その他  
 今回の制作はイベント(delegate,action,event,func)を大量使っています。
 個人的にまとめた各の関係は
 ```
