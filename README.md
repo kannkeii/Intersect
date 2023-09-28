@@ -42,8 +42,8 @@ AudioController.Instance.メンバー
 https://github.com/kannkeii/Intersect/tree/master/Assets/Scripts/TrainFactory
 
 利用サンプルは
-```
 https://github.com/kannkeii/Intersect/blob/master/Assets/Scripts/GenerateTrack.cs
+```
 private void Create(int enterRoadCnt, int exitRoadCnt, int trainCnt)
 {
     TrainFactory trainFactory = new DieselTrainFactory();
